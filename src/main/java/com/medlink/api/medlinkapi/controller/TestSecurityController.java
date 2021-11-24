@@ -5,13 +5,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TestSecurityController {
+
     @GetMapping("/admin/get")
-    public String getAdmin(){
+    public String getAdmin() {
         return "Hi admin";
     }
+
     @GetMapping("/user/get")
-    public String getUser(){
+    public String getUser() {
         return "Hi user";
     }
-
 }

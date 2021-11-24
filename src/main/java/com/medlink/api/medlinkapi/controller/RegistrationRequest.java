@@ -1,14 +1,15 @@
 package com.medlink.api.medlinkapi.controller;
 
-
-import com.sun.istack.NotNull;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
+
 @Data
-public class RegistrantionRequest {
-    @NotNull
+public class RegistrationRequest {
+
+    @NotEmpty
     private String login;
 
-    @NotNull
+    @NotEmpty
     private String password;
 }

@@ -1,12 +1,11 @@
 package com.medlink.api.medlinkapi.repository;
 
 
+
 import com.medlink.api.medlinkapi.entity.UserEntity;
-import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@EnableJdbcRepositories
-public interface UserEntityRepository{
+public interface UserEntityRepository extends JpaRepository<UserEntity, Integer> {
+
     UserEntity findByLogin(String login);
-
-    UserEntity save(UserEntity userEntity);
 }

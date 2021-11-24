@@ -1,7 +1,10 @@
 package com.medlink.api.medlinkapi.config.jwt;
 
-import com.medlink.api.medlinkapi.CustomUserDetailService;
+
+
+
 import com.medlink.api.medlinkapi.config.CustomUserDetails;
+import com.medlink.api.medlinkapi.config.CustomUserDetailsService;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,9 +19,11 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+import static org.springframework.util.StringUtils.hasText;
+
 @Component
 @Log
-public class JwtFiler extends GenericFilterBean {
+public class JwtFilter extends GenericFilterBean {
 
     public static final String AUTHORIZATION = "Authorization";
 
@@ -26,28 +31,24 @@ public class JwtFiler extends GenericFilterBean {
     private JwtProvider jwtProvider;
 
     @Autowired
-    private CustomUserDetailService customUserDetailService;
-
+    private CustomUserDetailsService customUserDetailsService;
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         logger.info("do filter...");
         String token = getTokenFromRequest((HttpServletRequest) servletRequest);
-        if(token != null && jwtProvider.validateToken(token)) {
+        if (token != null && jwtProvider.validateToken(token)) {
             String userLogin = jwtProvider.getLoginFromToken(token);
-            CustomUserDetails customUserDetails = customUserDetailService.loadUserByUsername(userLogin);
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities()) {
-                SecurityContextHolder.getContext().setAuthentication(auth);
-            };
-            filterChain.doFilter(servletRequest, servletResponse);
+            CustomUserDetails customUserDetails = customUserDetailsService.loadUserByUsername(userLogin);
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(auth);
         }
+        filterChain.doFilter(servletRequest, servletResponse);
+    }
 
-        }
-
-
-    private String getTokenFromRequest(HttpServletRequest request){
+    private String getTokenFromRequest(HttpServletRequest request) {
         String bearer = request.getHeader(AUTHORIZATION);
-        if(hasText(bearer) && bearer.startsWith("Bearer")){
+        if (hasText(bearer) && bearer.startsWith("Bearer ")) {
             return bearer.substring(7);
         }
         return null;
