@@ -1,5 +1,6 @@
 package com.medlink.api.medlinkapi.service;
 
+import com.medlink.api.medlinkapi.controller.RegistrationRequest;
 import com.medlink.api.medlinkapi.entity.RoleEntity;
 import com.medlink.api.medlinkapi.entity.UserEntity;
 import com.medlink.api.medlinkapi.repository.RoleEntityRepository;
@@ -18,8 +19,19 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserEntity saveUser(UserEntity userEntity) {
-        RoleEntity userRole = roleEntityRepository.findByName("ROLE_USER");
+    public UserEntity saveUser(RegistrationRequest registrationRequest) {
+        UserEntity userEntity = new UserEntity();
+        userEntity.setPassword(registrationRequest.getPassword());
+        userEntity.setLogin(registrationRequest.getLogin());
+
+        RoleEntity userRole = roleEntityRepository.findByName(registrationRequest.getRole());
+        if (userRole == null) {
+            RoleEntity role = new RoleEntity();
+            role.setName(registrationRequest.getRole());
+            roleEntityRepository.save(role);
+            userRole = roleEntityRepository.findByName(registrationRequest.getRole());
+        }
+
         userEntity.setRoleEntity(userRole);
         userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         return userEntityRepository.save(userEntity);
