@@ -19,10 +19,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public String registerUser(@RequestBody @Valid RegistrationRequest registrationRequest) {
-        UserEntity u = new UserEntity();
-        u.setPassword(registrationRequest.getPassword());
-        u.setLogin(registrationRequest.getLogin());
-        userService.saveUser(u);
+        userService.saveUser(registrationRequest);
         return "OK";
     }
 
