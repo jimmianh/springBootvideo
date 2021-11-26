@@ -1,7 +1,7 @@
 package com.medlink.api.medlinkapi.model;
 
 public class Drug {
-    private String drugID;
+    private String drug_Id;
     private String name;
     private String unit;
     private double price;
@@ -10,8 +10,8 @@ public class Drug {
     public Drug() {
     }
 
-    public Drug(String drugID, String name, String unit, double price, int quantity) {
-        this.drugID = drugID;
+    public Drug(String drug_Id, String name, String unit, double price, int quantity) {
+        this.drug_Id = drug_Id;
         this.name = name;
         this.unit = unit;
         this.price = price;
@@ -34,12 +34,12 @@ public class Drug {
         this.quantity = quantity;
     }
 
-    public String getDrugID() {
-        return drugID;
+    public String getdrug_Id() {
+        return drug_Id;
     }
 
-    public void setDrugID(String drugID) {
-        this.drugID = drugID;
+    public void setdrug_Id(String drug_Id) {
+        this.drug_Id = drug_Id;
     }
 
     public String getUnit() {

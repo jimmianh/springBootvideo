@@ -23,7 +23,6 @@ public class UserService {
         UserEntity userEntity = new UserEntity();
         userEntity.setPassword(registrationRequest.getPassword());
         userEntity.setLogin(registrationRequest.getLogin());
-
         RoleEntity userRole = roleEntityRepository.findByName(registrationRequest.getRole());
         if (userRole == null) {
             RoleEntity role = new RoleEntity();
