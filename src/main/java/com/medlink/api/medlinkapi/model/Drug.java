@@ -1,22 +1,19 @@
 package com.medlink.api.medlinkapi.model;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 public class Drug {
     private int drug_id;
     private int drg_store_id;
     private String drg_drug_name;
-    private String unit_name;
-    private BigDecimal price;
-    private BigDecimal quantity;
+    private List<DrgDrugPrice> listDrgDrugPrice;
 
-    public Drug(int drug_id, int drg_store_id, String drg_drug_name, String unit_name, BigDecimal price, BigDecimal quantity) {
+    public Drug(int drug_id, int drg_store_id, String drg_drug_name, List<DrgDrugPrice> listDrgDrugPrice) {
         this.drug_id = drug_id;
         this.drg_store_id = drg_store_id;
         this.drg_drug_name = drg_drug_name;
-        this.unit_name = unit_name;
-        this.price = price;
-        this.quantity = quantity;
+        this.listDrgDrugPrice = listDrgDrugPrice;
     }
 
     public Drug() {
@@ -46,28 +43,12 @@ public class Drug {
         this.drg_drug_name = drg_drug_name;
     }
 
-    public String getUnit_name() {
-        return unit_name;
+    public List<DrgDrugPrice> getListDrgDrugPrice() {
+        return listDrgDrugPrice;
     }
 
-    public void setUnit_name(String unit_name) {
-        this.unit_name = unit_name;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public BigDecimal getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(BigDecimal quantity) {
-        this.quantity = quantity;
+    public void setListDrgDrugPrice(List<DrgDrugPrice> listDrgDrugPrice) {
+        this.listDrgDrugPrice = listDrgDrugPrice;
     }
 }
 
