@@ -37,26 +37,26 @@ public class DrugController {
         return drugEntityRepository.findById(drug_id);
     }
 
-//    //Create new drug
-//    @RequestMapping(value = "/drug/create",
-//            method = RequestMethod.POST,
-//            produces = { MediaType.APPLICATION_JSON_VALUE,
-//                    MediaType.APPLICATION_XML_VALUE })
-//    @ResponseBody
-//    public int createDrug(@RequestBody Drug drug) {
-//
-//        System.out.println("(Service Side) Creating Drug: " + drug.getDrug_id() + "," + drug.getDrg_drug_name() + "," + drug.getUnit_name() + "," + drug.getPrice() + "," + drug.getQuantity());
-//
-//        return drugEntityRepository.insert(drug);
-//    }
+    //Create new drug
+    @RequestMapping(value = "/drug/create",
+            method = RequestMethod.POST,
+            produces = { MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE })
+    @ResponseBody
+    public String createDrug(@RequestBody InsertRequest insertRequest) {
+
+        System.out.println("(Service Side) Creating Drug: " + insertRequest.getDrg_drug_name()+ "\n" + insertRequest.getUnit_name() + "\n" + insertRequest.getPrice() );
+
+        return drugEntityRepository.insert(insertRequest);
+    }
 
 
-
+    //update
     @RequestMapping(value = "/drug/update",
             method = RequestMethod.PUT,
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ResponseBody
-    public int updateDrug(@RequestBody @Valid UpdateDrugRequest updateDrugRequest) {
+    public String updateDrug(@RequestBody @Valid UpdateDrugRequest updateDrugRequest) {
         return drugEntityRepository.updateByUnitId(updateDrugRequest);
     }
 
