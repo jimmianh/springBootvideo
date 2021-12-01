@@ -10,18 +10,18 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+import java.io.IOException;
 import java.util.*;
 
 @RestController
+//@RequestMapping("/drug")
 public class DrugController {
     @Autowired
     private DrugEntityRepository drugEntityRepository;
 
     //Show list drug
-    @RequestMapping(value = "/drug", 
-            method = RequestMethod.GET, 
-            produces = { MediaType.APPLICATION_JSON_VALUE, 
-                    MediaType.APPLICATION_XML_VALUE })
+    @RequestMapping(value= "/drug",
+            method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
     public List<Drug> getDrugs() {
         List<Drug> list = drugEntityRepository.showAll();
@@ -30,48 +30,42 @@ public class DrugController {
 
     //FindByID
     @GetMapping(value = "/drug/{drug_id}",
-            produces = { MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.APPLICATION_XML_VALUE })
+            produces = {MediaType.APPLICATION_JSON_VALUE,
+                    MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
     public Drug getDrug(@RequestBody int drug_id) {
         return drugEntityRepository.findById(drug_id);
     }
 
     //Create new drug
-    @RequestMapping(value = "/drug/create",
-            method = RequestMethod.POST,
-            produces = { MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.APPLICATION_XML_VALUE })
+    @RequestMapping(value ="/drug/create",
+            method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
-    public String createDrug(@RequestBody InsertRequest insertRequest) {
+    public void createDrug(@RequestBody InsertRequest insertRequest) {
 
-        System.out.println("(Service Side) Creating Drug: " + insertRequest.getDrg_drug_name()+ "\n" + insertRequest.getUnit_name() + "\n" + insertRequest.getPrice() );
+        System.out.println("(Service Side) Creating Drug: " + insertRequest.getDrg_drug_name() + "\n" + insertRequest.getUnit_name() + "\n" + insertRequest.getPrice());
 
-        return drugEntityRepository.insert(insertRequest);
+        drugEntityRepository.insert(insertRequest);
     }
 
 
     //update
-    @RequestMapping(value = "/drug/update",
-            method = RequestMethod.PUT,
-            produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
+    @RequestMapping(value= "/drug",
+            method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
-    public String updateDrug(@RequestBody @Valid UpdateDrugRequest updateDrugRequest) {
-        return drugEntityRepository.updateByUnitId(updateDrugRequest);
+    public void updateDrug(@RequestBody @Valid UpdateDrugRequest updateDrugRequest) {
+        drugEntityRepository.updateByUnitId(updateDrugRequest);
     }
 
-
-
     //Delete by id
-    @RequestMapping(value = "/drug/{drug_id}", 
+    @RequestMapping(value = "/drug",
             method = RequestMethod.DELETE, 
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ResponseBody
-    public void deleteDrug(@PathVariable("drug_id") String drug_id) {
+    public int deleteDrug(@RequestBody @Valid DeleteDrug deleteDrug) {
 
         System.out.
-                println("(Service Side) Deleting Drug: " + drug_id);
-
-        drugEntityRepository.deleteById(drug_id);
+                println("(Service Side) Deleting Drug: " + deleteDrug);
+       return drugEntityRepository.deleteById(deleteDrug);
     }
 }

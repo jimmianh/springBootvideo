@@ -12,6 +12,8 @@ public class InsertRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int drug_id;
 
+    private int unit_id;
+
     private int drg_store_id;
 
     private String drg_drug_name;
