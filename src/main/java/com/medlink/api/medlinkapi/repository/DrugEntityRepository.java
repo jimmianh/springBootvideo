@@ -61,8 +61,7 @@ public class DrugEntityRepository {
     }
 
     //find
-    public String findById(int drug_id) throws SQLException {
-        if(drug_id != 0){
+    public Drug findById(int drug_id) throws SQLException {
             Connection connection = establishConnection();
             PreparedStatement ps = connection.prepareStatement("select * from drg_drug where drug_id = ?");
             ps.setInt(1, drug_id);
@@ -74,18 +73,11 @@ public class DrugEntityRepository {
                         new BeanPropertyRowMapper(DrgDrug.class));
 
                 List<DrgDrugPrice> drgDrugPrice = showAllPrice(drug_id);
-                Drug drug = new Drug(drgDrug.getDrug_id(), drgDrug.getDrg_store_id(), drgDrug.getDrg_drug_name(), drgDrugPrice);
-                Gson g = new Gson();
-                String response = g.toJson(drug);
-                return response;
+                return new Drug(drgDrug.getDrug_id(), drgDrug.getDrg_store_id(), drgDrug.getDrg_drug_name(), drgDrugPrice);
             }
             else {
-                return exceptionHandle.getIdNotExist(exceptionHandle);
+                return null;
             }
-
-        }else{
-            return exceptionHandle.getIdIsNull(exceptionHandle);
-        }
     }
 
     public List<DrgDrugUnit> showAllUnit(int drug_id) {
@@ -159,21 +151,11 @@ public class DrugEntityRepository {
             Number keyDrug = keyHolder.getKey();
             System.out.println("Newly persisted customer generated id: " + keyDrug.longValue());
             System.out.println("-- loading customer by id --");
-
-
-
-            List<DrgDrugUnit> drgDrugUnitList = showAllUnit(keyDrug.intValue());
-
-//            for (int i = 0; i < drgDrugUnitList.size(); i++) {
-
-
                 String INSERT_UNIT_MESSAGE_SQL
                         = "INSERT INTO drg_drug_unit ( unit_name,unit_id, drg_store_id, drug_id)" + "VALUE(?, ?, ?, ?)";
                 System.out.println(keyDrug);
                 jdbcTemplate.update(connection -> {
                     PreparedStatement ps = connection.prepareStatement(INSERT_UNIT_MESSAGE_SQL, new String[]{"drug_unit_id"});
-                    ps.setString(1, insertRequest.getUnit_name());
-                    ps.setInt(2, insertRequest.getUnit_id());
                     ps.setInt(3, insertRequest.getDrg_store_id());
                     ps.setLong(4, keyDrug.longValue());
                     return ps;
@@ -182,18 +164,11 @@ public class DrugEntityRepository {
                 System.out.println("Newly persisted customer generated unit_id: " + keyDrgUnitId.longValue());
                 System.out.println("-- loading customer by id --");
                 //insert vào price
-
-
                 String INSERT_PRICE_MESSAGE_SQL
                         = "INSERT INTO drg_drug_price (price ,drug_unit_id, unit_id, drg_store_id, unit_name , drug_id )" + "VALUE(?, ?, ?, ?, ?, ?)";
                 System.out.println(keyDrug);
                 jdbcTemplate.update(connection -> {
                     PreparedStatement ps = connection.prepareStatement(INSERT_PRICE_MESSAGE_SQL, new String[]{"drg_price_id"});
-                    ps.setBigDecimal(1, insertRequest.getPrice());
-                    ps.setLong(2, keyDrgUnitId.longValue());
-                    ps.setInt(3, insertRequest.getUnit_id());
-                    ps.setInt(4, insertRequest.getDrg_store_id());
-                    ps.setString(5, insertRequest.getUnit_name());
                     ps.setLong(6, keyDrug.longValue());
                     return ps;
                 }, keyHolderPrice);
@@ -203,7 +178,6 @@ public class DrugEntityRepository {
                 System.out.println("Newly persisted customer generated unit_id: " + keyDrgPriceId.longValue());
                 System.out.println("-- loading customer by id --");
                 System.out.println("Thêm mới " + insertRequest.getDrg_drug_name() + " thành công");
-//            }
 
         } catch (Exception e) {
             System.out.println(e);

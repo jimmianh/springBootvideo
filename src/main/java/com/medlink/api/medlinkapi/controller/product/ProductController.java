@@ -1,47 +1,48 @@
-package com.medlink.api.medlinkapi.controller;
+package com.medlink.api.medlinkapi.controller.product;
 
 
+import com.medlink.api.medlinkapi.controller.InsertRequest;
+import com.medlink.api.medlinkapi.controller.UpdateDrugRequest;
 import com.medlink.api.medlinkapi.model.Drug;
 import com.medlink.api.medlinkapi.repository.DrugEntityRepository;
+import com.medlink.api.medlinkapi.service.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
 @RestController
-//@RequestMapping("/drug")
-public class DrugController {
+@RequestMapping("/product")
+public class ProductController {
     @Autowired
     private DrugEntityRepository drugEntityRepository;
 
+    @Autowired
+    ProductService productService;
+
     //Show list drug
-    @RequestMapping(value= "/drug",
-            method = RequestMethod.GET,
-            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    @ResponseBody
+    @GetMapping
     public List<Drug> getDrugs() {
-        List<Drug> list = drugEntityRepository.showAll();
-        return list;
+        return productService.getListProduct();
     }
 
     //FindByID
-    @GetMapping(value = "/drug/{drug_id}",
-            produces = {MediaType.APPLICATION_JSON_VALUE,
-                    MediaType.APPLICATION_XML_VALUE})
-    @ResponseBody
-    public String getDrug(@PathVariable int drug_id) throws SQLException {
-        return drugEntityRepository.findById(drug_id);
+    @GetMapping(value = "/{drug_id}")
+    public ResponseEntity<Drug> getDrug(@PathVariable("drug_id") Integer drugId) throws SQLException {
+        Drug drug = productService.findProductById(drugId);
+        return new ResponseEntity<>(drug, HttpStatus.OK);
     }
 
 
     //Create new drug
-    @RequestMapping(value ="/drug/create",
+    @RequestMapping(value ="/create",
             method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
     public void createDrug(@RequestBody InsertRequest insertRequest) {

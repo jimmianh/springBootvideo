@@ -1,8 +1,11 @@
-package com.medlink.api.medlinkapi.controller;
+package com.medlink.api.medlinkapi.controller.auth;
 
 import com.medlink.api.medlinkapi.config.jwt.JwtProvider;
+import com.medlink.api.medlinkapi.controller.AuthRequest;
+import com.medlink.api.medlinkapi.controller.AuthResponse;
+import com.medlink.api.medlinkapi.controller.RegistrationRequest;
 import com.medlink.api.medlinkapi.entity.UserEntity;
-import com.medlink.api.medlinkapi.service.UserService;
+import com.medlink.api.medlinkapi.service.auth.UserService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

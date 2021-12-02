@@ -1,4 +1,4 @@
-package com.medlink.api.medlinkapi.service;
+package com.medlink.api.medlinkapi.service.auth;
 
 import com.medlink.api.medlinkapi.controller.RegistrationRequest;
 import com.medlink.api.medlinkapi.entity.RoleEntity;
