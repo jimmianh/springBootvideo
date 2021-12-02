@@ -12,17 +12,13 @@ public class InsertRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int drug_id;
 
-    private int unit_id;
+    private int vat_percent;
 
+    private String drg_drug_cd;
     private int drg_store_id;
 
     private String drg_drug_name;
-
     private String unit_name;
-
-    private String drg_drug_cd;
-
     private BigDecimal price;
-
-    private int vat_percent;
+    private int unit_id;
 }
