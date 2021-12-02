@@ -54,15 +54,30 @@ public class ExceptionHandle {
         return response;
     }
 
-    public ExceptionHandle deleteError(ExceptionHandle exceptionHandle) {
+    public ExceptionHandle deleteIdNotExist(ExceptionHandle exceptionHandle) {
         exceptionHandle.setStatusCode("300");
-        exceptionHandle.setMessage("Xóa thất bại vì Id bạn đang để trống hoặc không tồn tại");
+        exceptionHandle.setMessage("Xóa thất bại vì Id không tồn tại");
         return exceptionHandle;
     }
 
-    public String getError(ExceptionHandle exceptionHandle) {
+    public ExceptionHandle deleteIdIsNull(ExceptionHandle exceptionHandle) {
         exceptionHandle.setStatusCode("300");
-        exceptionHandle.setMessage("Bạn đang chuyền thiếu mã thuốc");
+        exceptionHandle.setMessage("Xóa thất bại vì Id bạn đang để trống");
+        return exceptionHandle;
+    }
+
+    public String getIdNotExist(ExceptionHandle exceptionHandle) {
+        exceptionHandle.setStatusCode("300");
+        exceptionHandle.setMessage("Bạn đang truyền thiếu mã thuốc");
+        Gson g = new Gson();
+        String response = g.toJson(exceptionHandle);
+        return response;
+    }
+
+
+    public String getIdIsNull(ExceptionHandle exceptionHandle) {
+        exceptionHandle.setStatusCode("300");
+        exceptionHandle.setMessage("Bạn đang truyền thiếu mã thuốc");
         Gson g = new Gson();
         String response = g.toJson(exceptionHandle);
         return response;

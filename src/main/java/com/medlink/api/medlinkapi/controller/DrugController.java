@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 
 @RestController
@@ -34,7 +35,7 @@ public class DrugController {
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
-    public String getDrug(@PathVariable int drug_id) {
+    public String getDrug(@PathVariable int drug_id) throws SQLException {
         return drugEntityRepository.findById(drug_id);
     }
 
@@ -45,7 +46,7 @@ public class DrugController {
     @ResponseBody
     public void createDrug(@RequestBody InsertRequest insertRequest) {
 
-        System.out.println("(Service Side) Creating Drug: " + insertRequest.getDrg_drug_name() + "\n" + insertRequest.getUnit_name() + "\n" + insertRequest.getPrice());
+        System.out.println("(Service Side) Creating Drug: " + insertRequest.getDrg_drug_name() + "\n" );
 
         drugEntityRepository.insert(insertRequest);
     }
@@ -64,7 +65,7 @@ public class DrugController {
             method = RequestMethod.DELETE, 
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ResponseBody
-    public String deleteDrug(@PathVariable int drug_id) {
+    public String deleteDrug(@PathVariable int drug_id) throws SQLException{
 
         System.out.
                 println("(Service Side) Deleting Drug: " + drug_id);
