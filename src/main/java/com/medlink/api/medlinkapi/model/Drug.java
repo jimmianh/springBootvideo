@@ -7,16 +7,16 @@ public class Drug {
     private int drug_id;
     private int drg_store_id;
     private String drg_drug_name;
-    private List<DrgDrugPrice> listDrgDrugPrice;
+    private List<DrgDrugPrice> units;
 
-    public Drug(int drug_id, int drg_store_id, String drg_drug_name, List<DrgDrugPrice> listDrgDrugPrice) {
+    public Drug() {
+    }
+
+    public Drug(int drug_id, int drg_store_id, String drg_drug_name, List<DrgDrugPrice> units) {
         this.drug_id = drug_id;
         this.drg_store_id = drg_store_id;
         this.drg_drug_name = drg_drug_name;
-        this.listDrgDrugPrice = listDrgDrugPrice;
-    }
-
-    public Drug() {
+        this.units = units;
     }
 
     public int getDrug_id() {
@@ -43,12 +43,12 @@ public class Drug {
         this.drg_drug_name = drg_drug_name;
     }
 
-    public List<DrgDrugPrice> getListDrgDrugPrice() {
-        return listDrgDrugPrice;
+    public List<DrgDrugPrice> getUnits() {
+        return units;
     }
 
-    public void setListDrgDrugPrice(List<DrgDrugPrice> listDrgDrugPrice) {
-        this.listDrgDrugPrice = listDrgDrugPrice;
+    public void setUnits(List<DrgDrugPrice> units) {
+        this.units = units;
     }
 }
 

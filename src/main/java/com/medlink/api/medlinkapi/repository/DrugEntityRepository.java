@@ -1,9 +1,8 @@
 package com.medlink.api.medlinkapi.repository;
 
-import com.medlink.api.medlinkapi.controller.DeleteDrug;
+import com.google.gson.Gson;
 import com.medlink.api.medlinkapi.controller.InsertRequest;
 import com.medlink.api.medlinkapi.controller.UpdateDrugRequest;
-import com.medlink.api.medlinkapi.entity.DrugEntity;
 import com.medlink.api.medlinkapi.exception.ExceptionHandle;
 import com.medlink.api.medlinkapi.model.DrgDrug;
 import com.medlink.api.medlinkapi.model.DrgDrugPrice;
@@ -26,7 +25,7 @@ import java.util.List;
 public class DrugEntityRepository {
     @Autowired
     JdbcTemplate jdbcTemplate;
-
+    @Autowired
     ExceptionHandle exceptionHandle;
 
 
@@ -38,7 +37,6 @@ public class DrugEntityRepository {
             drug.setDrug_id(resultSet.getInt("drug_id"));
             drug.setDrg_store_id(resultSet.getInt("drg_store_id"));
             drug.setDrg_drug_name(resultSet.getString("drg_drug_name"));
-
             return drug;
         }
     }
@@ -47,64 +45,40 @@ public class DrugEntityRepository {
         return jdbcTemplate.query("SELECT * FROM drg_drug", new DrugRowMapper());
     }
 
-//    public Optional < Drug > findById(long drug_id) {
-//
-//       return Optional.ofNullable(jdbcTemplate.queryForObject("select * from drg_drug where id=?", new Object[] {
-//                       drug_id
-//             },
-//               new BeanPropertyRowMapper< Drug >(Drug.class)));
-
-//            cach 1: select * from drg_drug_unit where drug_id = ?
-////                        select * from drg_drug_price where drug_id = ?
-////                        join ...
-////            cach 2:
-//
-//    }
-//
-//
-//    public void unitAndPrice(int drug_id){
-//
-//
-//
-//        List [
-//                {
-//                    unit_name:
-//                    price:
-//                }]
-//
-//        return
-//        {
-//            drug_id: drgDrug.drug_id
-//            drg_drug_name:drgDrug.drg_drug_name
-//            [
-//                    {
-//                        unit_name:
-//                        price:
-//                    },
-//                    {
-//                        unit_name:
-//                        price:
-//                    },
-//                    {
-//                        unit_name:
-//                        price:
-//                    },
-//            ]
-//        }
-//    }
-//    }
-    public Drug  findById(  int drug_id) {
-        DrgDrug drgDrug = (DrgDrug) jdbcTemplate.queryForObject(
+    //find
+    public String findById(int drug_id) {
+        if(drug_id != 0 ){
+            DrgDrug drgDrug = (DrgDrug) jdbcTemplate.queryForObject(
                     "select * from drg_drug where drug_id = ?",
                     new Object[]{drug_id},
                     new BeanPropertyRowMapper(DrgDrug.class));
 
-        List<DrgDrugPrice> drgDrugPrice = jdbcTemplate.query(
-                "select *  from drg_drug_price where drug_id=?",
-                new BeanPropertyRowMapper(DrgDrugPrice.class), drgDrug.getDrug_id());
+            List<DrgDrugPrice> drgDrugPrice = showAllPrice(drug_id);
+            Drug drug = new Drug(drgDrug.getDrug_id(), drgDrug.getDrg_store_id(), drgDrug.getDrg_drug_name(), drgDrugPrice);
+            Gson g = new Gson();
+            String response = g.toJson(drug);
+            return response;
+        }else{
+            return exceptionHandle.getError(exceptionHandle);
+        }
+    }
 
-        Drug drug = new Drug(drgDrug.getDrug_id(),drgDrug.getDrg_store_id(), drgDrug.getDrg_drug_name(),drgDrugPrice );
-        return drug;
+
+    static class DrgPriceRowMapper implements RowMapper<DrgDrugPrice> {
+
+        @Override
+        public DrgDrugPrice mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+            DrgDrugPrice drgDrugPrice = new DrgDrugPrice();
+            drgDrugPrice.setDrg_price_id(resultSet.getInt("drg_price_id"));
+            drgDrugPrice.setPrice(resultSet.getBigDecimal("price"));
+            drgDrugPrice.setDrug_unit_id(resultSet.getInt("drug_unit_id"));
+            drgDrugPrice.setUnit_name(resultSet.getString("unit_name"));
+            return drgDrugPrice;
+        }
+    }
+
+    public List<DrgDrugPrice> showAllPrice(int drug_id) {
+        return jdbcTemplate.query("SELECT * FROM drg_drug_price where drug_id = ?", new DrgPriceRowMapper(), drug_id);
     }
 
 
@@ -113,13 +87,14 @@ public class DrugEntityRepository {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         KeyHolder keyHolderUnit = new GeneratedKeyHolder();
         KeyHolder keyHolderPrice = new GeneratedKeyHolder();
+
         try {
             //insert vào drug
             String INSERT_DRUG_MESSAGE_SQL
-                    = "INSERT INTO drg_drug ( drg_drug_name, drg_store_id,drg_drug_cd,vat_percent) " + "VALUE(?, ?,?,?)" ;
+                    = "INSERT INTO drg_drug ( drg_drug_name, drg_store_id,drg_drug_cd,vat_percent) " + "VALUE(?, ?,?,?)";
 
             jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement(INSERT_DRUG_MESSAGE_SQL,new String[]{"drug_id"});
+                PreparedStatement ps = connection.prepareStatement(INSERT_DRUG_MESSAGE_SQL, new String[]{"drug_id"});
                 ps.setString(1, insertRequest.getDrg_drug_name());
                 ps.setInt(2, insertRequest.getDrg_store_id());
                 ps.setString(3, insertRequest.getDrg_drug_cd());
@@ -133,10 +108,10 @@ public class DrugEntityRepository {
 
             //insert vào unit
             String INSERT_UNIT_MESSAGE_SQL
-                    = "INSERT INTO drg_drug_unit ( unit_name,unit_id, drg_store_id, drug_id)" + "VALUE(?, ?, ?, ?)" ;
+                    = "INSERT INTO drg_drug_unit ( unit_name,unit_id, drg_store_id, drug_id)" + "VALUE(?, ?, ?, ?)";
             System.out.println(keyDrug);
             jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement(INSERT_UNIT_MESSAGE_SQL,new String[]{"drug_unit_id"});
+                PreparedStatement ps = connection.prepareStatement(INSERT_UNIT_MESSAGE_SQL, new String[]{"drug_unit_id"});
                 ps.setString(1, insertRequest.getUnit_name());
                 ps.setInt(2, insertRequest.getUnit_id());
                 ps.setInt(3, insertRequest.getDrg_store_id());
@@ -152,10 +127,10 @@ public class DrugEntityRepository {
 
             //insert vào price
             String INSERT_PRICE_MESSAGE_SQL
-                    = "INSERT INTO drg_drug_price (price ,drug_unit_id, unit_id, drg_store_id, unit_name , drug_id )" + "VALUE(?, ?, ?, ?, ?, ?)" ;
+                    = "INSERT INTO drg_drug_price (price ,drug_unit_id, unit_id, drg_store_id, unit_name , drug_id )" + "VALUE(?, ?, ?, ?, ?, ?)";
             System.out.println(keyDrug);
             jdbcTemplate.update(connection -> {
-                PreparedStatement ps = connection.prepareStatement(INSERT_PRICE_MESSAGE_SQL,new String[]{"drg_price_id"});
+                PreparedStatement ps = connection.prepareStatement(INSERT_PRICE_MESSAGE_SQL, new String[]{"drg_price_id"});
                 ps.setBigDecimal(1, insertRequest.getPrice());
                 ps.setLong(2, keyDrgUnitId.longValue());
                 ps.setInt(3, insertRequest.getUnit_id());
@@ -172,31 +147,37 @@ public class DrugEntityRepository {
 
 
             System.out.println("Thêm mới " + insertRequest.getDrg_drug_name() + " thành công");
-        } catch ( Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
 
 
+    public String updateByUnitId(UpdateDrugRequest updateDrugRequest) {
+        if (updateDrugRequest.getDrug_id() == 0) {
+            System.out.println("Id không tồn tại hoặc do bạn đang để trống id");
 
-    public void updateByUnitId(UpdateDrugRequest updateDrugRequest) {
-//        if(updateDrugRequest.getDrug_id() == 0){
-//                exceptionHandle.updateError();
-//        }else{
+            return exceptionHandle.updateError(exceptionHandle);
+        } else {
             System.out.println("hello");
             jdbcTemplate.update("update drg_drug_price " + " set price = ? " + " where drug_unit_id = ?",
                     updateDrugRequest.getPrice(), updateDrugRequest.getDrug_unit_id());
             jdbcTemplate.update("update drg_drug " + " set drg_drug_name = ? " + " where drug_id = ?",
                     updateDrugRequest.getDrg_drug_name(), updateDrugRequest.getDrug_id());
             System.out.println("Sửa thành công tên và giá của thuốc có id là :" + updateDrugRequest.getDrug_id());
+            return "Sửa thành công tên và giá của thuốc có id là :" + updateDrugRequest.getDrug_id();
         }
-//    }
+    }
 
 
-    public int deleteById(DeleteDrug deleteDrug) {
-        System.out.println(deleteDrug.getDrug_id());
-        return jdbcTemplate.update("DELETE FROM drg_drug WHERE drug_id=?", deleteDrug.getDrug_id());
-
+    public String deleteById(int drug_id) {
+        if (drug_id == 0) {
+            return exceptionHandle.deleteError(exceptionHandle).toString();
+        } else {
+            jdbcTemplate.update("DELETE FROM drg_drug_price WHERE drug_id=?", drug_id);
+            jdbcTemplate.update("DELETE FROM drg_drug_unit WHERE drug_id=?", drug_id);
+            jdbcTemplate.update("DELETE FROM drg_drug WHERE drug_id=?", drug_id);
+            return "Xóa thành công sản phẩm có Id là:" + drug_id;
+        }
     }
 }
-

@@ -21,7 +21,8 @@ public class DrugController {
 
     //Show list drug
     @RequestMapping(value= "/drug",
-            method = RequestMethod.GET, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+            method = RequestMethod.GET,
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
     public List<Drug> getDrugs() {
         List<Drug> list = drugEntityRepository.showAll();
@@ -33,9 +34,10 @@ public class DrugController {
             produces = {MediaType.APPLICATION_JSON_VALUE,
                     MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
-    public Drug getDrug(@RequestBody int drug_id) {
+    public String getDrug(@PathVariable int drug_id) {
         return drugEntityRepository.findById(drug_id);
     }
+
 
     //Create new drug
     @RequestMapping(value ="/drug/create",
@@ -53,19 +55,19 @@ public class DrugController {
     @RequestMapping(value= "/drug",
             method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
-    public void updateDrug(@RequestBody @Valid UpdateDrugRequest updateDrugRequest) {
-        drugEntityRepository.updateByUnitId(updateDrugRequest);
+    public String updateDrug(@RequestBody @Valid UpdateDrugRequest updateDrugRequest) {
+        return drugEntityRepository.updateByUnitId(updateDrugRequest);
     }
 
     //Delete by id
-    @RequestMapping(value = "/drug",
+    @RequestMapping(value = "/drug/{drug_id}",
             method = RequestMethod.DELETE, 
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ResponseBody
-    public int deleteDrug(@RequestBody @Valid DeleteDrug deleteDrug) {
+    public String deleteDrug(@PathVariable int drug_id) {
 
         System.out.
-                println("(Service Side) Deleting Drug: " + deleteDrug);
-       return drugEntityRepository.deleteById(deleteDrug);
+                println("(Service Side) Deleting Drug: " + drug_id);
+       return drugEntityRepository.deleteById(drug_id);
     }
 }
