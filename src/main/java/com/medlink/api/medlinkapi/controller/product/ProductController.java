@@ -1,8 +1,8 @@
 package com.medlink.api.medlinkapi.controller.product;
 
 
-import com.medlink.api.medlinkapi.controller.InsertRequest;
-import com.medlink.api.medlinkapi.controller.UpdateDrugRequest;
+import com.medlink.api.medlinkapi.controller.request.InsertRequest;
+import com.medlink.api.medlinkapi.controller.request.UpdateDrugRequest;
 import com.medlink.api.medlinkapi.model.Drug;
 import com.medlink.api.medlinkapi.repository.DrugEntityRepository;
 import com.medlink.api.medlinkapi.service.product.ProductService;
@@ -34,42 +34,41 @@ public class ProductController {
     }
 
     //FindByID
-    @GetMapping(value = "/{drug_id}")
-    public ResponseEntity<Drug> getDrug(@PathVariable("drug_id") Integer drugId) throws SQLException {
+    @GetMapping(value = "/{drugId}")
+    public ResponseEntity<Drug> getDrug(@PathVariable("drugId") Integer drugId) throws SQLException {
         Drug drug = productService.findProductById(drugId);
         return new ResponseEntity<>(drug, HttpStatus.OK);
     }
 
 
     //Create new drug
-    @RequestMapping(value ="/create",
+    @RequestMapping(value ="",
             method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
     public void createDrug(@RequestBody InsertRequest insertRequest) {
 
-        System.out.println("(Service Side) Creating Drug: " + insertRequest.getDrg_drug_name() + "\n" );
+        System.out.println("(Service Side) Creating Drug: " + insertRequest.getDrgDrugName() + "\n" );
 
-        drugEntityRepository.insert(insertRequest);
+        productService.createProduct(insertRequest);
     }
 
 
     //update
-    @RequestMapping(value= "/drug",
+    @RequestMapping(value= "",
             method = RequestMethod.PUT, produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseBody
-    public String updateDrug(@RequestBody @Valid UpdateDrugRequest updateDrugRequest) {
-        return drugEntityRepository.updateByUnitId(updateDrugRequest);
+    public String updateDrug(@RequestBody @Valid UpdateDrugRequest updateDrugRequest) throws SQLException {
+        return productService.updateProduct(updateDrugRequest);
     }
 
     //Delete by id
-    @RequestMapping(value = "/drug/{drug_id}",
+    @RequestMapping(value = "/{drugId}",
             method = RequestMethod.DELETE, 
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
     @ResponseBody
-    public String deleteDrug(@PathVariable int drug_id) throws SQLException{
-
+    public String deleteDrug(@PathVariable int drugId) throws SQLException{
         System.out.
-                println("(Service Side) Deleting Drug: " + drug_id);
-       return drugEntityRepository.deleteById(drug_id);
+                println("(Service Side) Deleting Drug: " + drugId);
+       return productService.deleteProduct(drugId);
     }
 }

@@ -4,43 +4,43 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class Drug {
-    private int drug_id;
-    private int drg_store_id;
-    private String drg_drug_name;
+    private int drugId;
+    private int drgStoreId;
+    private String drgDrugName;
     private List<DrgDrugPrice> units;
 
     public Drug() {
     }
 
-    public Drug(int drug_id, int drg_store_id, String drg_drug_name, List<DrgDrugPrice> units) {
-        this.drug_id = drug_id;
-        this.drg_store_id = drg_store_id;
-        this.drg_drug_name = drg_drug_name;
+    public Drug(int drugId, int drgStoreId, String drgDrugName, List<DrgDrugPrice> units) {
+        this.drugId = drugId;
+        this.drgStoreId = drgStoreId;
+        this.drgDrugName = drgDrugName;
         this.units = units;
     }
 
-    public int getDrug_id() {
-        return drug_id;
+    public int getDrugId() {
+        return drugId;
     }
 
-    public void setDrug_id(int drug_id) {
-        this.drug_id = drug_id;
+    public void setDrugId(int drugId) {
+        this.drugId = drugId;
     }
 
-    public int getDrg_store_id() {
-        return drg_store_id;
+    public int getDrgStoreId() {
+        return drgStoreId;
     }
 
-    public void setDrg_store_id(int drg_store_id) {
-        this.drg_store_id = drg_store_id;
+    public void setDrgStoreId(int drgStoreId) {
+        this.drgStoreId = drgStoreId;
     }
 
-    public String getDrg_drug_name() {
-        return drg_drug_name;
+    public String getDrgDrugName() {
+        return drgDrugName;
     }
 
-    public void setDrg_drug_name(String drg_drug_name) {
-        this.drg_drug_name = drg_drug_name;
+    public void setDrgDrugName(String drgDrugName) {
+        this.drgDrugName = drgDrugName;
     }
 
     public List<DrgDrugPrice> getUnits() {

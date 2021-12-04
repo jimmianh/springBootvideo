@@ -1,7 +1,7 @@
 package com.medlink.api.medlinkapi.config;
 
 
-import com.medlink.api.medlinkapi.entity.UserEntity;
+import com.medlink.api.medlinkapi.model.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

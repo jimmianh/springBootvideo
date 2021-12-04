@@ -1,4 +1,4 @@
-package com.medlink.api.medlinkapi.entity;
+package com.medlink.api.medlinkapi.model;
 
 import lombok.Data;
 

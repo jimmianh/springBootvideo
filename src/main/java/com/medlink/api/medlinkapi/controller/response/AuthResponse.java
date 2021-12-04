@@ -1,4 +1,4 @@
-package com.medlink.api.medlinkapi.controller;
+package com.medlink.api.medlinkapi.controller.response;
 
 
 import lombok.AllArgsConstructor;

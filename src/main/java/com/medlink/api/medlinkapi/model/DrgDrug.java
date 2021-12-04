@@ -4,52 +4,41 @@ import java.math.BigDecimal;
 
 public class DrgDrug {
     private int drugId;
-    private int drg_store_id;
-    private String drg_drug_name;
-    private String unit_name;
+    private int drgStoreId;
+    private String drgDrugName;
+    private String unitName;
     private BigDecimal price;
 
-    public DrgDrug(int drug_id, int drg_store_id, String drg_drug_name, String unit_name, BigDecimal price) {
-        this.drugId = drug_id;
-        this.drg_store_id = drg_store_id;
-        this.drg_drug_name = drg_drug_name;
-        this.unit_name = unit_name;
-        this.price = price;
-    }
-
-    public int getDrug_id() {
+    public int getDrugId() {
         return drugId;
     }
 
-    public DrgDrug() {
+    public void setDrugId(int drugId) {
+        this.drugId = drugId;
     }
 
-    public int getDrg_store_id() {
-        return drg_store_id;
+    public int getDrgStoreId() {
+        return drgStoreId;
     }
 
-    public void setDrg_store_id(int drg_store_id) {
-        this.drg_store_id = drg_store_id;
+    public void setDrgStoreId(int drgStoreId) {
+        this.drgStoreId = drgStoreId;
     }
 
-    public void setDrugId(int drug_id) {
-        this.drugId = drug_id;
+    public String getDrgDrugName() {
+        return drgDrugName;
     }
 
-    public String getDrg_drug_name() {
-        return drg_drug_name;
+    public void setDrgDrugName(String drgDrugName) {
+        this.drgDrugName = drgDrugName;
     }
 
-    public void setDrg_drug_name(String drg_drug_name) {
-        this.drg_drug_name = drg_drug_name;
+    public String getUnitName() {
+        return unitName;
     }
 
-    public String getUnit_name() {
-        return unit_name;
-    }
-
-    public void setUnit_name(String unit_name) {
-        this.unit_name = unit_name;
+    public void setUnitName(String unitName) {
+        this.unitName = unitName;
     }
 
     public BigDecimal getPrice() {
@@ -57,6 +46,17 @@ public class DrgDrug {
     }
 
     public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public DrgDrug() {
+    }
+
+    public DrgDrug(int drugId, int drgStoreId, String drgDrugName, String unitName, BigDecimal price) {
+        this.drugId = drugId;
+        this.drgStoreId = drgStoreId;
+        this.drgDrugName = drgDrugName;
+        this.unitName = unitName;
         this.price = price;
     }
 }

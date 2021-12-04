@@ -1,8 +1,8 @@
 package com.medlink.api.medlinkapi.service.auth;
 
-import com.medlink.api.medlinkapi.controller.RegistrationRequest;
-import com.medlink.api.medlinkapi.entity.RoleEntity;
-import com.medlink.api.medlinkapi.entity.UserEntity;
+import com.medlink.api.medlinkapi.controller.request.RegistrationRequest;
+import com.medlink.api.medlinkapi.model.RoleEntity;
+import com.medlink.api.medlinkapi.model.UserEntity;
 import com.medlink.api.medlinkapi.repository.RoleEntityRepository;
 import com.medlink.api.medlinkapi.repository.UserEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;

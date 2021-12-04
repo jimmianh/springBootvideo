@@ -1,7 +1,7 @@
 package com.medlink.api.medlinkapi.config;
 
 
-import com.medlink.api.medlinkapi.entity.UserEntity;
+import com.medlink.api.medlinkapi.model.UserEntity;
 import com.medlink.api.medlinkapi.service.auth.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;

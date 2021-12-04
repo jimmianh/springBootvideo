@@ -1,4 +1,4 @@
-package com.medlink.api.medlinkapi.controller;
+package com.medlink.api.medlinkapi.controller.auth;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
